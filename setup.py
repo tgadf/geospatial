@@ -3,7 +3,7 @@ import setuptools
 
 setup(
   name = 'geospatial',
-  py_modules = ['geospatial'],
+  py_modules = ['geoUtils', 'censusUtils'],
   version = '0.0.1',
   description = 'A Python Geospatial Tool',
   long_description = open('README.md').read(),
@@ -20,7 +20,7 @@ setup(
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: Utilities'
   ],
-  install_requires=['geohash==0.0.1', 'Shapely', 'pyshp', 'utils==0.0.1'],
+  install_requires=['geohash==0.0.1', 'Shapely', 'pyshp', 'utils==0.0.1', 'haversine'],
   dependency_links=['git+ssh://git@github.com/tgadf/geohash.git#egg=geohash-0.0.1', 'git+ssh://git@github.com/tgadf/utils.git#egg=utils-0.0.1']
 )
  

@@ -1,8 +1,8 @@
-import pygeohash as geohash
+import geohash
 from timeUtils import clock, elapsed
 from shapely.geometry.polygon import Polygon
 from shapely.geometry import Point
-from pygeohash import neighbors, getGeoChars, encode, decode_exactly
+from geohash import neighbors, getChars, encode, decode_exactly
 from numpy import ceil,fabs,asarray
 from random import random
 from os.path import basename, join, splitext, isdir, splitext
@@ -232,7 +232,7 @@ def getEWGeos(geo):
     i0 = imod
 
 def getShapeInternalGeos(shape, geos, prec, debug=False, verydebug=False):
-    ch = getGeoChars()
+    ch = getChars()
     
     ngeos = {}
     poly = getPolygon(shape)
