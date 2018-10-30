@@ -20,6 +20,7 @@ setup(
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: Utilities'
   ],
-  install_requires = ['git+https://github.com/tgadf/geohash.git']
+  install_requires=['geohash==0.0.1'],
+  dependency_links=['git+ssh://git@github.com/tgadf/geohash.git#egg=geohash-0.0.1']
 )
  

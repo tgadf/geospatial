@@ -1,2 +1,0 @@
-git+git://github.com/tgadf/geohash@master
-#git+https://github.com/tgadf/geohash.git
