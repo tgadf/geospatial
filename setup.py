@@ -3,7 +3,7 @@ import setuptools
 
 setup(
   name = 'geospatial',
-  py_modules = ['geoUtils', 'censusUtils'],
+  py_modules = ['geospatialUtils', 'censusUtils'],
   version = '0.0.1',
   description = 'A Python Geospatial Tool',
   long_description = open('README.md').read(),
