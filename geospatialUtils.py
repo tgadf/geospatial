@@ -1,8 +1,8 @@
-import geohash
 from timeUtils import clock, elapsed
+from geohash import neighbors, getChars, encode, decode_exactly
+
 from shapely.geometry.polygon import Polygon
 from shapely.geometry import Point
-from geohash import neighbors, getChars, encode, decode_exactly
 from numpy import ceil,fabs,asarray
 from random import random
 from os.path import basename, join, splitext, isdir, splitext
@@ -33,7 +33,7 @@ def getShapeGeosOld(poly, prec, geo, geos, ignores, depth, debug=False):
     
     if depth > 150:
         return
-    lat,long  = geohash.decode_exactly(geo)[:2]
+    lat,long  = decode_exactly(geo)[:2]
     pnt  = Point(long,lat)
     if poly.contains(pnt) is False:
         if debug:
@@ -46,7 +46,7 @@ def getShapeGeosOld(poly, prec, geo, geos, ignores, depth, debug=False):
         if debug:
             print("    Adding {0} to make {1} total geos".format(geo, len(geos)))
         dp = depth+1
-        neighbors = set(geohash.neighbors(geo)).difference(ignores)
+        neighbors = set(neighbors(geo)).difference(ignores)
         #print(depth, len(geos), len(ignores), neighbors)
         for neighbor in list(neighbors):
             if debug:
@@ -58,10 +58,10 @@ def addGeos(geos, geo, init=False):
     nAdd  = 0
     nGeos = len(geos)
     geos.add(geo)
-    neighbors = set(geohash.neighbors(geo)).difference(geos)
+    neighbors = set(neighbors(geo)).difference(geos)
     for neighbor in list(neighbors):
         geos.add(neighbor)
-        nneighbors = set(geohash.neighbors(neighbor)).difference(geos)
+        nneighbors = set(neighbors(neighbor)).difference(geos)
         for nneighbor in list(nneighbors):
             geos.add(nneighbor)
     dAdd = len(geos) - nGeos
@@ -77,7 +77,7 @@ def addLinearGeos(irec, nshapes, shape, prec, maxmiss=None, debug=True):
     geos = set()
     for i,pnt in enumerate(shape.points):
         long,lat = pnt
-        geo      = geohash.encode(latitude=lat, longitude=long, precision=prec)
+        geo      = encode(latitude=lat, longitude=long, precision=prec)
         geos.add(geo)
     if debug:
         print("Added {0} geos (guess = N/A) from {1} points.".format(len(geos), len(shape.points)))
@@ -125,7 +125,7 @@ def addShapeGeos(irec, nshapes, shape, prec, geos, maxmiss=None, debug=True):
         nrounds += 1
         genlat = latrange*random() + lat0
         genlng = lngrange*random() + lng0
-        geo    = geohash.encode(latitude=genlat, longitude=genlng, precision=prec)
+        geo    = encode(latitude=genlat, longitude=genlng, precision=prec)
         retval = addGeos(geos, geo)
         if retval == 0:
             nmiss = 0
@@ -155,7 +155,7 @@ def getInitGeo(shape, prec=7):
         pnt     = center
         long0   = center.x
         lat0    = center.y
-        geo     = geohash.encode(latitude=lat0, longitude=long0, precision=prec)
+        geo     = encode(latitude=lat0, longitude=long0, precision=prec)
         geos    = set([geo])
     except:
         geos    = set()
