@@ -42,34 +42,6 @@ def getPolygon(shape):
         poly = None
         
 
-def getShapeGeosOld(poly, prec, geo, geos, ignores, depth, debug=False):
-    if debug:
-        print("getShapeGeos({0})".format(geo))
-    if geo in ignores:
-        return
-    
-    if depth > 150:
-        return
-    lat,long  = decode_exactly(geo)[:2]
-    pnt  = Point(long,lat)
-    if poly.contains(pnt) is False:
-        if debug:
-            print("    Adding {0} to list of ignores ({1})".format(geo, len(ignores)))
-        ignores.add(geo)
-        return
-    else:
-        geos.add(geo)
-        ignores.add(geo)
-        if debug:
-            print("    Adding {0} to make {1} total geos".format(geo, len(geos)))
-        dp = depth+1
-        neighbors = set(neighbors(geo)).difference(ignores)
-        #print(depth, len(geos), len(ignores), neighbors)
-        for neighbor in list(neighbors):
-            if debug:
-                print("  Testing {0} from {1} at {2}".format(neighbor, geo, depth))
-            getShapeGeos(poly=poly, prec=prec, geo=neighbor, geos=geos, ignores=ignores, depth=dp, debug=debug)
-        return
     
 def addGeos(geos, geo, init=False):
     nAdd  = 0
@@ -155,7 +127,7 @@ def addShapeGeos(irec, nshapes, shape, prec, geos, maxmiss=None, debug=True):
         print("Added {0} geos (guess = {1}) with {2} round and {3} misses in the end.".format(len(geos), ngeoguess, nrounds, nmiss))
     return 
 
-def getShapeData(shapedir, debug=False):
+def readShapeData(shapedir, debug=False):
     name = splitext(basename(shapedir))[0]
     readerName = join(shapedir, name)
     print("Reading ShapeData from {0}, {1} --> {2}".format(shapedir, name, readerName))
@@ -253,6 +225,9 @@ def getShapeInternalGeos(shape, geos, prec, debug=False, verydebug=False):
     
     ngeos = {}
     poly = getPolygon(shape)
+    if poly is None:
+        ngeos={}
+        return ngeos
     ng = len(geos)
     
     for j,geo in enumerate(geos.keys()):
@@ -362,6 +337,9 @@ def getShapeInternalGeos(shape, geos, prec, debug=False, verydebug=False):
 
 
 def mergeInternalGeos(ngeos, prec, debug=False, verydebug=False):
+    if ngeos is None or len(ngeos) == 0:
+        ngeos={}
+        return ngeos
     
     apps = []
     intgeos = list(ngeos.keys())
