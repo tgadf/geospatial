@@ -1,5 +1,5 @@
 from timeUtils import clock, elapsed
-from geohash import neighbors, getChars, encode, decode_exactly
+from geohash import neighbors, getChars, encode, decode_exactly, bbox
 
 from shapely.geometry.polygon import Polygon
 from shapely.geometry import Point
@@ -16,6 +16,23 @@ from haversine import haversine
 def getBBox(shape):
     bbox = [float('%.6f' % coord) for coord in shape.bbox]
     return bbox
+
+
+        
+def getBB(gh, istuple=False):
+    routes=[('n', 'w'), ('n', 'e'), ('s', 'e'), ('s', 'w'), ('n', 'w')]
+    if istuple is False:
+        bb = {'x': [], 'y': []}
+    else:
+        bb = []
+    boundbox = bbox(gh)
+    for route in routes:
+        if istuple is False:
+            bb['x'].append(boundbox[route[1]])
+            bb['y'].append(boundbox[route[0]])
+        else:
+            bb.append(tuple([boundbox[route[0]], boundbox[route[1]]]))
+    return bb
 
 
 def getPolygon(shape):
